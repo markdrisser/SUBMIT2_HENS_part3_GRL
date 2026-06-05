@@ -86,6 +86,14 @@ $^{#1}$#2\relax}\vskip-\parskip}}
 \renewcommand{\thetable}{S\arabic{table}}
 \linenumbers
 
+% Track changes
+\newcommand{\newTxt}{\textcolor{red}}
+
+% Hide previous edits
+% \newcommand{\sti}[1]{\unskip}
+% \newcommand{\newTxt}{\textcolor{black}}
+
+
 %% ------------------------------------------------------------------------ %%
 %  Title
 %
@@ -150,7 +158,7 @@ $^{#1}$#2\relax}\vskip-\parskip}}
 \subsection{Extreme value analysis} \label{sec_eva}
 
 As described in the main text, %Section~\ref{sec:goals_data}, 
-the focus of our analysis are on 2m temperature and heat index values from the 240, 246, 252, and 258 hour lead times (approximately day 10 of each forecast) across all initialization days. Let $X^{ij}_{dl}$ denote the variable of interest for grid box $\{\bg_i: i=1,\dots,N_\text{grid}\}$, ensemble member $j=1, \dots, N_\text{ens}$, initalization date $d = 1, \dots, 92$, and lead time $l \in \{240, 246, 252, 258\}$. Then, we define $Y_{ij} = \max_{d} \max_{l} X^{ij}_{dl}$. % denote the extreme six-hourly measurements for grid box $\{\bg_i: i=1,\dots,N_\text{grid}\}$ and ensemble member $j=1, \dots, N_\text{ens}$. 
+the focus of our analysis are on 2m temperature and heat index values from the 240, 246, 252, and 258 hour lead times (approximately day 10 of each forecast) across all initialization days \newTxt{from the IFS and HENS-58 ensembles}. \newTxt{For each ensemble, l}et $X^{ij}_{dl}$ denote the variable of interest for grid box $\{\bg_i: i=1,\dots,N_\text{grid}\}$, ensemble member $j=1, \dots, N_\text{ens}$, initalization date $d = 1, \dots, 92$, and lead time $l \in \{240, 246, 252, 258\}$. Then, we define $Y_{ij} = \max_{d} \max_{l} X^{ij}_{dl}$. % denote the extreme six-hourly measurements for grid box $\{\bg_i: i=1,\dots,N_\text{grid}\}$ and ensemble member $j=1, \dots, N_\text{ens}$. 
 Since the $\{Y_{ij}\}$ arise as the maximum of a stochastic process over a specified time interval or ``block,'' Theorem~3.1.1 of \cite{Coles2001} states that the cumulative distribution function (CDF) of $Y_{ij}$ can be well approximated by a member of the Generalized Extreme Value (GEV) family of distributions,
 \begin{equation} \label{gev_fam}
 F_i(y) \equiv \mathbb{P}(Y_{ij} \leq y) = \exp\left\{-\left[ 1 + \xi_i\left(\frac{y - \mu_i}{\sigma_i}\right) \right]^{-1/\xi_i} \right\}, \hskip1ex \forall \hskip1ex y \hskip1ex \text{s.t.} \hskip1ex 1 + \xi_i(y - \mu_i)/\sigma_i > 0,
@@ -209,7 +217,7 @@ Furthermore, we use the optimally-noninformative priors for Bayesian analysis of
         p(\xi_i) & \propto & \exp\{-0.577215(1+\xi_i)\}, \hskip3ex \xi_i > -0.5
     \end{array}
 \end{equation}
-\citep{Zhang2024}. For simplicity, we apply this statistical model separately to each IFS grid box.
+\citep{Zhang2024}. For simplicity, we apply this statistical model separately to each \st{IFS} \newTxt{$0.25^\circ \times 0.25^\circ$} grid box.
 % In order to account for spatial dependence in heatwave climatology, we assume that, in the prior distribution, the GEV coefficients are a linear combination of local, compactly supported basis functions. The location parameter at grid box $i$ is written as
 % % \noindent Grid box $i$ has GEV coefficients $\{\mu_i, \sigma_i, \xi_i\}$, where
 % \[
@@ -347,12 +355,38 @@ Since the posterior distribution is not available in closed form, we resort to M
     \caption{Best estimates (posterior medians) of the IFS-GEV fields and extreme thresholds for 2m temperature.}
     \label{fig:bestGEVt2m}
 \end{figure}
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{Figure_GEVfields_t2m_HENS58_gridbox.png}
+    \caption{Best estimates (posterior medians) of the HENS-58-GEV fields and extreme thresholds for 2m temperature.}
+    \label{fig:bestGEVt2m_HENS58}
+\end{figure}
+
 \begin{figure}[!t]
     \centering
     \includegraphics[width=\textwidth]{Figure_GEVfields_heatindex_gridbox.png}
     \caption{Best estimates (posterior medians) of the IFS-GEV fields and extreme thresholds for the heat index.}
     \label{fig:bestGEVheatindex}
 \end{figure}
+
+\color{red}
+\newpage
+\subsection{Comparing IFS-GEV with HENS-58-GEV}
+
+A simple comparison of the GEV fields obtained from IFS and HENS-58 can be conducted by looking at the difference in posteriors from each statistical fit. Best estimates of this difference are calculated as the difference in posterior means. To account for the uncertainty innate to fitting GEV distributions to a finite sample, we then calculate a 95\% credible interval for the difference and use stippling to denote where the uncertainty interval includes zero. 
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{Figure_GEVfields_t2m_IFS_vs_HENS58_diff.png}
+    \caption{Best estimates (posterior means) of the difference between IFS-GEV and HENS-58-GEV fields for t2m. Stippling denotes where this difference is \textit{not} significant (the 95\% uncertainty interval includes zero).}
+    \label{fig:GEVdiff}
+\end{figure}
+
+Results for 2m temperatures are shown in Figure~\ref{fig:GEVdiff}. The GEV location fields from both ensembles are quite different, with the IFS-GEV location larger than the HENS-58-GEV location for most of the globe. Interestingly, the spatial pattern of Figure~\ref{fig:GEVdiff}(a) aligns quite closely with the difference in ensemble maxima shown in Figure 1(b) of the main text. Both the GEV scale and shape are statistically indistinguishable in IFS-GEV and HENS-58-GEV for nearly the whole globe. This suggests that both forecast systems yield equivalent performance for resolving the most extreme tail risks for 2m temperatures.
+
+
+\color{black}
 
 \section{Assessment of HENS realism in Greenland} \label{appdx:greenland}
 
@@ -366,8 +400,8 @@ The fact that Greenland stands out so clearly with large anomalies relative to E
 
 \begin{figure*}[!h]
 \centering
-\includegraphics[width = \textwidth]{Figure_IFS_GEV_probContain_HENS_barchart.pdf}
-\caption{Tally of the land fraction falling into each category for probability of containment (panel a.) and differences (panel b.) when comparing IFS-GEV and HENS return levels. In panel (a), lighter colors indicate that HENS estimates are less likely relative to IFS-GEV.}
+\includegraphics[width = \textwidth]{Figure_t2m_GEV_probContain_HENS_barchart.pdf}
+\caption{Tally of the land fraction falling into each category for probability of containment (panel a.) and differences (panel b.) when comparing IFS-GEV, HENS-58-GEV, and HENS return levels. In panel (a), lighter colors indicate that HENS estimates are less likely relative to GEV estimates.}
 \label{fig:barchart}
 \end{figure*}
 
