@@ -370,8 +370,33 @@ Since the posterior distribution is not available in closed form, we resort to M
     \label{fig:bestGEVheatindex}
 \end{figure}
 
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{Figure_GEVfields_heatindex_HENS58_gridbox.png}
+    \caption{Best estimates (posterior medians) of the HENS-58-GEV fields and extreme thresholds for the heat index.}
+    \label{fig:bestGEVheatindex_HENS58}
+\end{figure}
+
+
 \color{red}
 \newpage
+
+\subsection{Testing GEV assumptions}
+
+The fundamental challenge in modeling the far upper tail and whether a statistical model can adequately represent the behavior of unobserved extremes beyond the support of the data rests in determining whether the underlying postulates under which the distribution of block maxima may converge to the GEV distribution hold in nature. It is therefore critical to ensure that the GEV assumptions are reasonably satisfied (i.e., that the GEV distribution provides a suitable fit to the data) by the statistical model described in Section~\ref{sec_global}. This is a challenging task given the large number of grid boxes across two ensembles and two output variables.
+
+One approach for checking the goodness of fit for a statistical distribution to an empirical sample is via a quantile-quantile (Q-Q) plot, which compares the sample quantiles of the data with the corresponding ``theoretical'' quantiles of the fitted distribution. Points falling along the 45$^\circ$ (1-1) line are evidence of a good fit, i.e., that the sample quantiles are equal to the theoretical quantiles. The goodness of fit should of course be relative to the statistical uncertainty, which is accounted for with a pointwise method based on the Kolmogorov-Smirnov distribution \citep{Owen1995}. For each grid box, variable, and ensemble, we  compare the maxima against the theoretical quantiles of a $\text{GEV}(\mu,\sigma,\xi)$ distribution, using the posterior mean estimates of the GEV coefficients. To summarize the large number of gauged locations, we then simply count the number of measurements that fall outside the 95\% confidence band of the Q-Q plot, stratifying by the upper and lower tail. Anything less than 5\% of all points indicates that the GEV distribution provides a good fit to the data, and hence the GEV assumptions are satisfied.
+
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{Figure_outsideCI_QQplots.pdf}
+    \caption{Tally of the number of extreme measurements that fall outside the 95\% confidence band for the heat index and 2m temperatures in the IFS and HENS-58 ensemble. Fewer than 5\% of points (less than 3 out of 50 and 58 ensemble members, respectively) indicates a good statistical fit for the inferred GEV distribution.}
+    \label{fig:qq_agg}
+\end{figure}
+
+Results are shown in Figure~\ref{fig:qq_agg}. The GEV distributions from both ensembles and variables provide an excellent fit to a large majority of the data: more than 80\% of grid boxes have less than 5\% of points falling outside the confidence band. These results provide strong evidence that the GEV assumptions are satisfied and we can be confident in using the fitted distributions to assess the extreme upper tail behavior.
+
 \subsection{Comparing IFS-GEV with HENS-58-GEV}
 
 A simple comparison of the GEV fields obtained from IFS and HENS-58 can be conducted by looking at the difference in posteriors from each statistical fit. Best estimates of this difference are calculated as the difference in posterior means. To account for the uncertainty innate to fitting GEV distributions to a finite sample, we then calculate a 95\% credible interval for the difference and use stippling to denote where the uncertainty interval includes zero. 
