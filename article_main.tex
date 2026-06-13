@@ -303,8 +303,9 @@ As discussed in Section~\ref{sec:intro}, our primary objective is to quantify ho
 \begin{enumerate}
 \item The initial and boundary conditions must be identical to those that were realized during the boreal summer of 2023.
 \item We restrict our attention to short-range hindcasts in order to preserve memory of these initial and boundary conditions and avoid drift toward the generating model's climatology.
-\item Candidate models must produce low rates of false positives and false negatives, ensuring the physical realism of simulated weather.
-\item Candidate models must accurately capture large departures from climatology, as the summer of 2023 represents precisely such an event.
+% \item Candidate models must produce low rates of false positives and false negatives, ensuring the physical realism of simulated weather.
+% \item Candidate models must accurately capture large departures from climatology, as the summer of 2023 represents precisely such an event.
+\item Candidate models must accurately predict weather events departing from climatology in summer 2023, ensuring the physical realism of simulated weather.
 \item Candidate models must exhibit fast growth in ensemble spread, with a spread-to-RMSE ratio of approximately one at the lead times of interest, to guarantee well-calibrated ensembles.
 \end{enumerate}
 The last criterion ensures that the ensemble's growth in spread will encompass both plausibly worse \textit{and} plausibly better counterfactual futures.  If the spread were, e.g., identically equal to zero, then all the counterfactuals would be the same as reality and could not be worse by construction.
@@ -351,7 +352,7 @@ The output of this procedure is a set of 50 extreme six-hourly measurements at e
 
 \subsection{Statistical methods and probabilistic framing}
 
-In this work we assess whether extreme value theory applied to a conventional ${\cal{O}}(50)$-member ensemble can extrapolate into the tails of the forecast distribution as effectively as direct sampling with a huge ensemble.  The main statistical analysis is therefore fitting generalized extreme value (GEV) distributions to measurements of 2m temperature and the heat index from the IFS \newTxt{and HENS-58} ensembles over the summer of 2023 \citep{Coles2001}. We use Bayesian methods to learn the GEV distributions from the \st{IFS} \newTxt{smaller} ensembles as well as conduct uncertainty quantification. A detailed description of our methods is described in Section 1 of the Supporting Information. 
+In this work we assess whether extreme value theory applied to a conventional ${\cal{O}}(50)$-member ensemble can extrapolate into the tails of the forecast distribution as effectively as direct sampling with a huge ensemble.  The main statistical analysis is therefore fitting generalized extreme value (GEV) distributions to measurements of 2m temperature and the heat index from the IFS \newTxt{and HENS-58} ensembles over the summer of 2023 \citep{Coles2001}. We use Bayesian methods to learn the GEV distributions from the \st{IFS} \newTxt{smaller} ensembles as well as conduct uncertainty quantification. A detailed description of our methods is described in Section 1 of the Supporting Information. \newTxt{The main objective in fitting extreme value distributions to small ensembles is to extrapolate beyond the range of the data to arbitrarily large quantiles, effectively converting a small sample to an infinite sample.}
 
 \newTxt{
 The validity of any statistical model for extreme measurements depends on whether its underlying assumptions are satisfied in practice. We verify this for GEV distribution applied to the IFS and HENS-58 data in two ways. First, we argue that the ensembles, which span on the order of 50 maxima across 4 six-hourly time steps $\times$ 92 days = 368 data points, are sufficient for the asymptotic GEV behavior to emerge, particularly since extreme temperatures are bounded \citep{dombry2019maximum} as shown in Supplemental Figures S1-S4. Second, we verify goodness of fit using Q-Q plots, which compare empirical quantiles of the data against theoretical quantiles of the fitted distribution.
@@ -365,37 +366,72 @@ Our results use IFS and HENS to generate storyline simulations \citep{Shepherd20
 \label{sec:Results}
 
 \color{red}
-\noindent Proposed new outline for Section 3.1-3.2:
+% \noindent Proposed new outline for Section 3.1-3.2:
+% \begin{itemize}
+%     \item Two modeling systems: ERA5/IFS and SFNO
+%     \item Three ensemble sizes: 1, $\mathcal{O}(50)$, and $>\mathcal{O}(10^4)$
+% \end{itemize}
+% Comparisons to make:
+% \begin{enumerate}
+%     \item Within a single modeling system while varying ensemble size: 
+%     \begin{itemize}
+%         \item ERA vs. IFS. vs. IFS-GEV (this is a comparison that doesn't need HENS.  But showing it would illustrate the ``state of the science'' prior to HENS)
+%         \item HENS-58 vs. HENS-58-GEV vs. HENS
+%     \end{itemize}
+%     \item Between modeling systems of identical size:
+%     \begin{itemize}
+%         \item IFS vs. HENS-58 (demonstrate what changing a model does to the statistics of ensembles of identical size)
+%         \item IFS-GEV vs. HENS-58-GEV (ditto, for GEV statistics derived from two ensembles of identical size from different modeling systems)
+%         \item HENS vs. IFS-GEV
+%     \end{itemize}
+% \end{enumerate}
+% A chain-wise comparison could look like:
+% ERA vs IFS (same model, different ensemble size), then IFS to HENS-58 (different model, same ensemble size), then HENS-58 to HENS (same model, different ensemble size, with the latter ensemble size much greater than 1).
+% This chain-wise comparison gets to the ``heart of the matter," namely how much worse could the summer have been. 
+
+% Attach null hypotheses to comparisons: state whether  the results are not surprising (conform to the null hypothesis) or surprising (do not conform):
+
+% For example:
+% Type 1 comparison 1 (ERA vs. IFS): since IFS spans roughly 2 sigma away from the mean, our null hypothesis should be that IFS will exceed ERA for 97.5\% of the time.  (We find that this is approximately true, by the way, so not surprising).
+% Type 1 comparison 1 (ERA vs IFS-GEV): null hypothesis is that IFS-GEV exceeds ERA everywhere.
+% Type 2 comparison 1 (IFS vs. HENS-58): null hypothesis is that these should be basically identical (because HENS was calibrated against ERA, and ERA and IFS are two members of a series of nearly identical models).
+% Type 2 comparison 2: ditto
+% Type 2 comparison 3: null hypothesis is, I think, that IFS-GEV is indistinguishable from HENS.  This is violated, and hence surprising and interesting (our "a third, a third, a third" finding in IPCC probability parlance).  Reason I think null hypothesis is that HENS is indistinguishable from IFS-GEV: HENS and IFS-GEV have the same ICs and BCs; HENS and IFS-GEV are both, in effect, asymptotically equivalent to ensemble sizes >>> 1; HENS and IFS are both nearly perfectly calibrated (spread/skill scores approx. equal to 1); HENS is trained on ERA, which is nearly identical to model used to generate IFS.  So, this is the primary surprising result.
+
+
+As discussed in Section~\ref{sec:DataMethods}, we have a variety of ways answer the key objective of our study: namely, how much worse the summer of 2023 plausibly may have been.
+More specifically, we have data from two modeling systems: numerical models from ECMWF (ERA5 and the IFS ensemble) and the machine learning model SFNO (the HENS data). For each system, we have different ensemble sizes: a single realization (ERA5); ensembles on the order of 50 members (IFS and HENS-58); and very large, or effectively infinite, ensembles (HENS, IFS-GEV, and HENS-58-GEV). In order to clearly separate differences due to modeling systems from differences in ensemble size, we first compare across ensemble sizes within each modeling system in Section~\ref{subsec:withinMod} and then contrast the modeling systems for comparable ensemble sizes in Section~\ref{subsec:btwnMod}. 
+For the huge (HENS) and ``infinite'' (IFS-GEV and HENS-58-GEV) ensembles, we use the 99.9th percentile as the extreme threshold of interest, rather than the GEV upper bound or ensemble maxima, since this threshold from HENS contains the ERA5 t2m maxima for nearly 98\% of the global land area considered (with diminishing returns on the fraction of containment for higher percentiles; see Table S2 in the Supporting Information).
+
+\subsection{Comparing within models across ensemble size} \label{subsec:withinMod}
+
 \begin{itemize}
-    \item Two modeling systems: ERA5/IFS and SFNO
-    \item Three ensemble sizes: 1, $\mathcal{O}(50)$, and $>\mathcal{O}(10^4)$
+\item ERA vs. IFS. vs. IFS-GEV (this is a comparison that doesn't need HENS.  But showing it would illustrate the ``state of the science'' prior to HENS)
+\item HENS-58 vs. HENS-58-GEV vs. HENS
 \end{itemize}
-Comparisons to make:
-\begin{enumerate}
-    \item Within a single modeling system while varying ensemble size: 
-    \begin{itemize}
-        \item ERA vs. IFS. vs. IFS-GEV (this is a comparison that doesn't need HENS.  But showing it would illustrate the ``state of the science'' prior to HENS)
-        \item HENS-58 vs. HENS-58-GEV vs. HENS
-    \end{itemize}
-    \item Between modeling systems of identical size:
-    \begin{itemize}
-        \item IFS vs. HENS-58 (demonstrate what changing a model does to the statistics of ensembles of identical size)
-        \item IFS-GEV vs. HENS-58-GEV (ditto, for GEV statistics derived from two ensembles of identical size from different modeling systems)
-        \item HENS vs. IFS-GEV
-    \end{itemize}
-\end{enumerate}
-A chain-wise comparison could look like:
-ERA vs IFS (same model, different ensemble size), then IFS to HENS-58 (different model, same ensemble size), then HENS-58 to HENS (same model, different ensemble size, with the latter ensemble size much greater than 1).
-This chain-wise comparison gets to the ``heart of the matter," namely how much worse could the summer have been. 
 
-Attach null hypotheses to comparisons: state whether  the results are not surprising (conform to the null hypothesis) or surprising (do not conform):
+Figure~\ref{fig:compwithin} shows a comparison of extreme 2m temperatures across ensemble size for a given modeling system. We first compare the data and ensembles from ECMWF, comparing the realized surface temperature maxima as quantified by the ERA5 reanalysis product (Figure~\ref{fig:compwithin}a.) with IFS and IFS-GEV (Figure~\ref{fig:compwithin}b.). This comparison does not involve the machine learning emulator; however, this illustrates the state of the science prior to our generation of HENS. The ERA5 data have the hottest values ($53.6^\circ$C) in the Kerman Province of Iran, near $(58.5^\circ$E, $30^\circ$N$)$; otherwise, limited areas in Northern Africa, the Arabian Peninsula, Iran, and Central Asia experienced temperatures exceeding $47^\circ$C. Since the 50-member IFS ensemble spans roughly 2 sigma away from the mean (CITE?), our null hypothesis is that IFS will exceed ERA for 97.5\% of the time. This comparison is shown in the top row of Figure~\ref{fig:compwithin}(a), where we see that our expectation is approximately true: the IFS maxima exceed ERA5 for 94.2\% of the land area \textbf{(add uncertainty interval)}. In many cases this exceedance is more than $3^\circ$C and as large as $18.8^\circ$C in isolated areas. Moving from the 50-member ensemble maxima to the IFS-GEV extreme threshold, our expectation is that the IFS-GEV is always larger since it represents an extrapolation to a much larger quantile ($0.999$) relative to the ensemble maximum (which should roughly be the $1-1/50=0.98$ quantile). Once again, this expectation is verified: except for a very small area in central Asia, the IFS-GEV threshold larger for all global land areas considered. For approximately three-fourths of the globe, this exceedance is modest -- within $1^\circ$C -- but for some areas the IFS-GEV estimates are more than $2^\circ$C. These modest differences are primarily due to the fact that the IFS-GEV temperature distributions are bounded (see Supplemental Figure XX) with a relatively light tail.
 
-For example:
-Type 1 comparison 1 (ERA vs. IFS): since IFS spans roughly 2 sigma away from the mean, our null hypothesis should be that IFS will exceed ERA for 97.5\% of the time.  (We find that this is approximately true, by the way, so not surprising).
-Type 1 comparison 1 (ERA vs IFS-GEV): null hypothesis is that IFS-GEV exceeds ERA everywhere.
-Type 2 comparison 1 (IFS vs. HENS-58): null hypothesis is that these should be basically identical (because HENS was calibrated against ERA, and ERA and IFS are two members of a series of nearly identical models).
-Type 2 comparison 2: ditto
-Type 2 comparison 3: null hypothesis is, I think, that IFS-GEV is indistinguishable from HENS.  This is violated, and hence surprising and interesting (our "a third, a third, a third" finding in IPCC probability parlance).  Reason I think null hypothesis is that HENS is indistinguishable from IFS-GEV: HENS and IFS-GEV have the same ICs and BCs; HENS and IFS-GEV are both, in effect, asymptotically equivalent to ensemble sizes >>> 1; HENS and IFS are both nearly perfectly calibrated (spread/skill scores approx. equal to 1); HENS is trained on ERA, which is nearly identical to model used to generate IFS.  So, this is the primary surprising result.
+
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width = \textwidth]{Figure_compare_within.png}
+\caption{\newTxt{
+Within-model comparisons across ensemble size. Panels (a) and (b) examine the effect of increasing ensemble size for the ECMWF modeling family, comparing the realized 2m temperatures from ERA5 (a single realization) with IFS (maximum of a 50-member ensemble) with IFS-GEV (extrapolated to the 99.9th percentile). Panels (c) and (d) consider Spherical Fourier Neural Operators, comparing the maximum from the 58-member subset ensemble with HENS-58-GEV (extrapolated to the 99.9th percentile) with HENS (the 99.9th percentile of the huge ensemble).}}
+\label{fig:compwithin}
+\end{figure*}
+
+
+\subsection{Comparing between models for fixed ensemble size} \label{subsec:btwnMod}
+
+\begin{itemize}
+\item IFS vs. HENS-58 (demonstrate what changing a model does to the statistics of ensembles of identical size)
+\item IFS-GEV vs. HENS-58-GEV (ditto, for GEV statistics derived from two ensembles of identical size from different modeling systems)
+\item HENS vs. IFS-GEV
+\end{itemize}
+
+
 \color{black}
 
 
