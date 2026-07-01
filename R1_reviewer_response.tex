@@ -39,7 +39,10 @@
 \newcommand{\bfbeta}{{\boldsymbol \beta}}
 % \newcommand{\done}{\rlap{$\square$}{\raisebox{2pt}{\large\hspace{1pt}\cmark}}%
 
-
+\usepackage{xr}
+\externaldocument{article_main}
+%\externaldocument[si-]{si-template_2019}
+\externaldocument{article_supplement}
 
 \title{Response to review \#1: ``Surface temperature extremes produced by huge machine learning hindcasts of summer 2023"}
 \author{Mark D. Risser and coauthors}
@@ -149,7 +152,16 @@ The Discussion frames the conclusions as a property of ``ML weather models" and 
 
 Where compute permits, repeating the analysis on the 2023 ICs through a second emulator (e.g., GraphCast, AIFS, or Pangu) - even at reduced ensemble size - would help bound architecture-specific contributions to the headline result. In any case, claims throughout the manuscript could helpfully be scoped to the SFNO-HENS construction actually tested.
 
-\newTxt{Need help from Ankur on this one.}
+\newTxt{We thank the reviewer for this suggestion. However, adding other emulators would not be fit-for-purpose for the experimental design here, for three reasons. First, in \cite{Mahesh2024hugeensemblesidesign} and \cite{Mahesh2024hugeensemblespartii}, we carefully design an ensemble system with the correct properties on extremes, and we validate the performance using an in-depth pipeline focused on extreme diagnostics and spectral diagnostics.  In particular, we validate the extreme forecasts of our ensemble using the Extreme Forecast Index, threshold-weighted versions of the Continuous Ranked Probability Score, Receiver Operator Characteristic curves, and reliability diagrams.  Additionally, by construction, we ensure that the spectra of our ensemble remain constant with lead time \cite{Mahesh2024hugeensemblesidesign}, while other models (notably GraphCast and AIFS) get progressively blurrier with lead time.  This shown in \cite{Kochkov2024} for GraphCast and \cite{Lang2024} for AIFS.  This means that these other models would not be suitable for the experiment conducted here.  Second, the suggested models do not readily have an ensemble analogue, and converting a deterministic model to an ensemble one is itself a significant undertaking.  Third, we note that some of the additional ML emulators suggested (AIFS-Single, Pangu, and GraphCast) would have the same downsides as SFNO, such as biases from training on ERA5 and predicting global 0.25 degree weather with 6-hour timesteps.}
+
+\vspace{1ex}
+
+
+\newTxt{Looking forward, a new class of ML weather models, which are trained as ensembles end-to-end, have been developed.  These models include FourCastNet3, AIFS-ENS, FuXi-ENS, and GenCast.  (This list is rapidly growing, although we note many probabilistic models are not trained at the 0.25-degree resolution used here due to computational cost.)  These models have been newly developed and recently been made open-source in experimental configurations (in some, though not all, cases).  Initially, these models should be subject to the same tests on extremes and stable spectra outlined in \cite{Mahesh2024hugeensemblesidesign}.  Upon successful completion and validation of these tests, huge ensemble experiments should be conducted with these next-generation ensemble ML weather models, and we add a statement to the discussion to highlight this important point.}
+
+\vspace{1ex}
+\noindent \textcolor{cadmiumgreen}{\textit{Future huge ensembles should be conducted with ML models that are trained to be ensemble forecasts from end to end.  The extreme diagnostics pipeline presented in \cite{Mahesh2024hugeensemblesidesign} should be used to evaluate the extremes of these models, and upon successful completion of these diagnostics, huge ensemble experiments can be conducted with these models.  These models have better weather forecast skill than SFNO-BVMC, and they can be used to investigate .}}
+\vspace{1ex}
 
 \item Bulk SFNO validation does not establish physical consistency in the tail
 
@@ -159,9 +171,17 @@ This concern is sharpened by the fact that the ``exceptionally unlikely" tempera
 
 A process-level diagnostic for at least one or two flagged regions (Greenland and central US would be a natural contrast) - comparing HENS and IFS large-scale circulation (z500, jet position, blocking indices), low-level humidity, a soil-moisture proxy, and 2 m temperature jointly in the most extreme members - would substantially strengthen the physical interpretation. Should HENS prove over-dispersive at this lead time, that finding could be openly acknowledged together with its implications for the headline claim. For the high-latitude exceedances specifically, a brief sensitivity check of the 2 m vs surface temperature distinction would help readers calibrate confidence.
 
-\newTxt{MDR: this is a fair point. Discuss with Ankur.}
-
-
+\newTxt{We appreciate the reviewer's raising the issue of HENS's validity at the tail of the distributions, particularly concerning the ``exceptionally likely'' temperatures occuring primarily at high latitudes (Russia, Alaska, and Canada) but with contributions from, e.g., northern Africa.  First, we should note that the first of the two HENS papers cited in this manuscript (Mahesh et al., 20225a, \href{https://doi.org/10.5194/gmd-18-5575-2025}{10.5194/gmd-18-5575-2025}) goes well beyond the assertion that we only checked ``bulk level validation of SFNO -- i.e, good performance on standard average forecast-skill metrics'' We refer the reviewer in particular to $\S$3.3 in the first HENS paper concerning ``Extreme diagnostics,'' where we verify that SFNO exhibits excellent performance on the same diagnostics used by ECMWF and NCEP \textbf{specifically} to evaluate their NWP forecasts of extremes, namely :
+\begin{itemize}
+    \item ECMWF's Extreme Forecast Index;
+    \item Receiver operating characteristic curves; 
+    \item The threshold-weighted continuous ranked probability score (twCRPS); 
+    \item Reliability diagrams, which measure the forecast probability to the observed occurrence.
+\end{itemize}
+Likewise, we refer the reviewer to the second of the two HENS papers cited in this manuscript (Mahesh et al., 2025, \href{https://doi.org/10.5194/gmd-18-5605-2025}{10.5194/gmd-18-5605-2025}), where we show a confusion matrix (Figure~12b) that convincingly demonstrates that HENS has superior performance relative to ECMWF's IFS for capturing surface heat extremes.  All five of these test metrics are computed for 2m~surface air temperature, the quantity of interest here, and the quantitative performance of HENS and IFS (discussed at length in these two HENS papers) are comparable for all five tests. \\*[1em]
+To further demonstrate the realism of the extreme surface air temperatures produced by HENS, we have added two figures in the supplemental materials accompanying the main manuscript (Fig.~\ref{fig:Misses_Ground_Truth} and~\ref{fig:IFS_bias_vs_ERA5}).  The first figure shows that IFS misses the true observed high temperatures at 10 times the rate of HENS.  These misses occur in some of the same regions, namely eastern China, northern Africa, and central America, flagged by this reviewer.  The second figure shows that the largest underestimates of IFS of the true maximum surface air temperatures occur over many of the high-latitudes regions, namely Alaska, Greenland, and northern Russia, also flagged by this reviewer, as well as Antarctica, which was not.  HENS's estimates of the highest surface temperatures are, effectively unbiased in the same regions.\\*[1em]
+We submit that the evidence from the two HENS papers and these two supplemental figures clearly establish that ``the tail-end states it [SFNO] generates correspond to plausible physical realizations'' without the ``substantial uncertain[ty]'' raised in this comment.
+}
 \end{enumerate}
 
 
@@ -203,7 +223,7 @@ The work of Risser et al. presents a reforecast of the summer 2023 using the SFN
     \item is the ML model providing physically meaningful trajectories at such long lead times? I kept the image that ML models tend to provide “blurried” trajectories at long time scales when they are trained on the RMSE. Has the physics of the ML model been validated at such long lead times?
     \end{enumerate}
 
-    \newTxt{MDR: Need some help from Ankur here.}
+    \newTxt{Thank you for bringing up this important issue.  The blurring of the ensemble with long lead times is an important shortcoming of other emulators, such as GraphCast (discussed in \cite{Kochkov2024}) and AIFS \cite{Lang2024}.   In our ensemble, we intentionally validate that our model does not become progressively blurrier at longer lead times, since our interest is in sampling extremes.  We verify that the spectra of our model remains constant with lead time in Figure~10 of \cite{Mahesh2024hugeensemblesidesign}.  Some causes of blurring are the use of autoregressive training or ML models with too few parameters. \cite{Subramanian2026}.  We intentionally make training decisions to mitigate these issues as much as possible.  Through the diagnostic pipeline in \cite{Mahesh2024hugeensemblesidesign} and \cite{Mahesh2024hugeensemblespartii}, we test the models' reliability diagram, Receive Operator Curves (validating the models' ability to discriminate between extremes and non-extremes), its Extreme Forecast Index (the basis for which is the ECMWF supplemental score on extremes), and the threshold and outcome-weighted versions of the continuous ranked probability score. This increases confidence that the model is fit for purpose.}
 
     \item GEV analysis: I have major reservations with respect to the GEV analysis. The first one is that it is far from clear that you can indeed fit a GEV law over the maxima from the different ensemble members. My main reservation is that the members are probably not independent (contrary to what is claimed in L52-53 in the supplementary material): if you imagine that you have one intense heatwave over the summer at one grid point, the maxima over the summer will probably come from starting dates around this pre-existing maxima for all or most ensemble members, which means that the maxima will come from essentially similar events (similar to ensemble boosting, see Bloin-Wibe et al. (2025)). The use of a 10-day lead time partially alleviates the problem but I don’t think you can assume that the members are independent: they are extremely strongly tied to the dynamics of the 2023 summer, and to its oceanic variability, as you also argue at several places in the paper. Moreover, fitting a GEV over 50 data points likely strongly underestimates the probability of unseen extremes (see Zeder et al. (2023)). Nevertheless, I don’t see why you need this GEV analysis: why not compare directly the output distributions and/or the empirical quantiles?
 
@@ -268,8 +288,8 @@ The work of Risser et al. presents a reforecast of the summer 2023 using the SFN
 \end{enumerate}
 
 
-% \section*{References}
-% \bibliography{paper2B}% common bib file
-% \bibliographystyle{abbrvnat} 
+\section*{References}
+\bibliographystyle{abbrvnat} 
+\bibliography{agusample}% common bib file
 % \bibliographystyle{apalike}
 \end{document}
