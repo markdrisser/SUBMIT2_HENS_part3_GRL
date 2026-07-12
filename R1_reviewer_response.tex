@@ -24,7 +24,7 @@
 \usepackage[noblocks]{authblk}
 \usepackage[table]{xcolor} % added table option here, needed for the cellcolor command
 \usepackage{soul}
-
+\usepackage{todonotes}
 
 \definecolor{cadmiumgreen}{rgb}{0.0, 0.42, 0.24}
 
@@ -82,6 +82,27 @@ Dear Dr. Risser,
 \noindent  \textcolor{cadmiumgreen}{We thank you and the reviewers for your time and careful follow-up review of our manuscript. We greatly appreciate the opportunity to resubmit our manuscript following additional revisions. We are happy to provide a point-by-point response and revised manuscript that specifically addresses the handling editor's concern.}
 
 \vskip1ex
+\noindent \textcolor{cadmiumgreen}{Before addressing the individual reviewer comments, we briefly summarize the extensive changes made to our manuscript since the initial submission. These changes were motivated by both reviewers' comments and will be described more thoroughly below. The manuscript now includes the following changes:}
+
+\color{cadmiumgreen}
+\begin{itemize}
+    \item The abstract and introduction now clearly state the overall objective of our manuscript: how much worse the record-breaking 2023 boreal summertime heat extremes might plausibly have become, given identical large-scale conditions. 
+    \item Section 2.1 now contains a clear enumeration of the criteria used to select data sets and ensembles that are appropriate for precisely answering our overall objective.
+    \item Section 2.2 summarizes the thorough vetting of the ML ensemble that was conducted in previous work, establishing that the emulator is ``fit for purpose'' in exploring extreme surface temperatures.
+    \item Throughout our results, we now include comparison with a 58-member subset ensemble from the ML emulator to clearly evaluate the effect of different modeling systems (IFS vs. SFNO) for similar ensemble sizes (approximately 50 members).
+    \item We verify the appropriateness of applying GEV distributions to the ensemble data sets (Section 2.5).
+    \item Our results section has been completely restructured. We attempt to clarify comparisons by assessing:
+    \begin{enumerate}
+        \item[(a)] Differences within a given forecast model (IFS or SFNO) across ensemble size (Section 3.1)
+        \item[(b)] Differences between forecast models for the same ensemble size (Section 3.2)
+    \end{enumerate}
+    We also summarize the overall chain of comparisons within and between models (Section 3.3) and clearly describe where the biggest and most unexpected changes occur.
+    \item To maintain adherence to GRL page limits, we have removed the heat index results (previously Section 3.3) to be pursued in a separate manuscript.
+\end{itemize}
+
+\color{black}
+
+\vskip1ex
 \noindent \textcolor{cadmiumgreen}{In addition to this response document, we also provide a track changes version of the manuscript and a ``final'' version without tracked changes. All line numbers in the rest of this document correspond to the final version with tracked changes. }
 
 \vskip1ex
@@ -89,7 +110,7 @@ Dear Dr. Risser,
 
 \noindent \newTxt{Mark Risser}
 
-\clearpage
+% \clearpage
 
 \subsection*{Reviewer \#1 Comments}
 
@@ -118,7 +139,11 @@ Two checks would be helpful to address this:
     \item A GEV-consistency check on multi-year HENS hindcasts, where such hindcasts exist or can be readily generated - comparing the location, scale, and (especially) shape parameter between HENS-derived and ERA5-derived GEV fits over the same period - would directly test tail-shape preservation.
 \end{enumerate}
 
-\newTxt{MDR comments: some version of (a) may already be done in the GMD papers? Would prefer to avoid (b) but could consider comparing GEVs fit to HENS with the IFS GEVs.}
+% \newTxt{MDR comments: some version of (a) may already be done in the GMD papers? Would prefer to avoid (b) but could consider comparing GEVs fit to HENS with the IFS GEVs.}
+
+\newTxt{We thank the reviewer for this comment, which is well taken. We fully agree that it is critical to verify that HENS is reproducing the upper tail of the ``real'' atmospheric distribution. An extensive exploration of this very point was explored in previous work \citep{Mahesh2024hugeensemblesidesign, Mahesh2024hugeensemblespartii}. The salient aspects of this analysis are now enumerated in Section 2.2 (lines XX-XX). See our response to your major comment \#4 for further details on this point.}
+
+\newTxt{Regarding point (b), while generating comparable multi-year HENS hindcasts is out of scope for the paper at hand, we now include a comparison of GEV fits to IFS (a physics-based model) and the HENS-58 subset ensemble --- shown in Supplemental Figure XX and also referenced in Figure 2 and described in Section 3.2 (lines XX-XX). Our results show that the difference between the ensembles is primarily a location shift, and that the spread of each ensemble (GEV scale) and, most importantly, the tail index (GEV shape) are statistically indistinguishable essentially everywhere. This assessment provides confidence that HENS is preserving the shape of the upper tail relative to a comparable NWP ensemble.}
 
 
 \item The headline 30\% exceedance does not propagate IFS-GEV posterior uncertainty into the aggregated statistic
@@ -132,15 +157,22 @@ Three complementary analyses, requiring no new ML inference, would help establis
 \begin{enumerate}
     \item Propagate the IFS-GEV posterior into the headline aggregate. For each posterior draw of $(\mu, \sigma, \xi)$ at every grid cell, recompute the global land-area fraction falling into each IPCC confidence category, and report the resulting 95\% credible interval on the 30\% ``unlikely or worse" number. A complementary check with a simple spatial prior on $\xi$ (e.g., latitudinal pooling) would indicate how much per-grid-cell $\xi$ noise contributes to the headline number.
 
-    \newTxt{MDR: need to clarify that the posterior has already been propagated into the confidence categories. Not clear how to get an uncertainty on the 30\% since this IS the uncertainty. See if Josh has any ideas. Point to consider: make a sample plot showing what the confidence category represents for the supplement.}
+    % \newTxt{MDR: need to clarify that the posterior has already been propagated into the confidence categories. Not clear how to get an uncertainty on the 30\% since this IS the uncertainty. See if Josh has any ideas. Point to consider: make a sample plot showing what the confidence category represents for the supplement.}
+
+    \newTxt{Thank you for raising this point. We note that the IFS-GEV posterior distributions have already been propagated into the headline aggregate: the posterior distributions on the GEV coefficients imply a posterior distribution of the 99.9 percentile, which is used to calculate the IPCC confidence category at each grid box. 
+    Ultimately, it is unclear how to obtain an uncertainty on the 30\% headline since, in a way, this \textit{is} the uncertainty. 
+    As an aside, we have elected to not pursue a spatial analysis for this work, since it is unclear what spatial scale for any pooling (latitude-based or otherwise) is appropriate. }
     
     \item Compare HENS and IFS GEV fits on a level playing field. Fit the same Bayesian GEV to a HENS sub-sample of the same size as the IFS ensemble, and compare the resulting $(\mu, \sigma, \xi)$ field - and the implied 99.9\% return level - with IFS-GEV. If the two GEV fits are statistically indistinguishable, this would support the interpretation that HENS samples from a distribution consistent with IFS, and that the headline 30\% difference reflects sampling-density gain alone. If they differ, the headline difference cannot be attributed solely to HENS exploring further into the same distribution, and would need to be reconciled with possible distributional shifts (e.g., over-dispersion or training-data biases).
 
-    \newTxt{MDR: This is a great idea, will pursue. See later our claim that ``HENS is doing more than sampling the IFS-GEV upper tail" $\rightarrow$ HENS is doing more than sampling an estimated statistical distribution, not necessarily what IFS would imply with larger sampling.}
+    % \newTxt{MDR: This is a great idea, will pursue. See later our claim that ``HENS is doing more than sampling the IFS-GEV upper tail" $\rightarrow$ HENS is doing more than sampling an estimated statistical distribution, not necessarily what IFS would imply with larger sampling.}
+
+    \newTxt{This is an excellent suggestion. In response to your feedback, the paper now includes an extensive evaluation and comparison of IFS with a 58-member subset ensemble from the ML emulator. This is discussed in Section 3.2 (line XX-XX) and an explicit comparison of GEV fits is shown in Supplemental Figure XX and discussed in lines XX-XX. As mentioned in our response to your first comment, the main result is that while the center of the two ensembles (GEV location) are quite often different, the spread (GEV scale) and tail index (GEV shape) are statistically indistinguishable. This implies that the two ensembles exhibit comparable behavior for the most extreme events.}
 
     \item A non-parametric sanity check at matched empirical percentile. Compare the HENS empirical 98\% percentile (observable directly, without GEV extrapolation) with the IFS empirical maximum (98\% of the 50-member ensemble). Agreement at this level would indicate that HENS and IFS are consistent at percentiles where both can be observed empirically, narrowing the question of where any apparent excess at 99.9\% could come from.
 
-    \newTxt{MDR: Also great idea and will do.}
+    % \newTxt{MDR: Also great idea and will do.}
+    \newTxt{We thank the reviewer for this feedback. Section 3.2 now includes a comparison of the ensemble maxima from IFS and the HENS-58 subset ensemble, which is a matched empirical percentile for the two similarly-sized ensembles. This statistic is clearly not the same for the two ensembles. However, we argue that this does not imply that HENS is ``wrong,'' nor would agreement indicate that HENS is ``right'' since identical matched percentiles says nothing about the overall forecast distribution. We leave a deeper exploration of the differences between IFS and HENS-58 to future work, but now include some explanation in the text as to why we should not necessarily expect the two ensembles to yield identical forecast distributions (see lines XX-XX in Section 2.3).}
     
 \end{enumerate}
 
@@ -159,7 +191,7 @@ Where compute permits, repeating the analysis on the 2023 ICs through a second e
 
 \newTxt{Looking forward, a new class of ML weather models, which are trained as ensembles end-to-end, have been developed.  These models include FourCastNet3, AIFS-ENS, FuXi-ENS, and GenCast.  (This list is rapidly growing, although we note many probabilistic models are not trained at the 0.25-degree resolution used here due to computational cost.)  These models have been newly developed and recently been made open-source in experimental configurations (in some, though not all, cases).  Initially, these models should be subject to the same tests on extremes and stable spectra outlined in \cite{Mahesh2024hugeensemblesidesign}.  Upon successful completion and validation of these tests, huge ensemble experiments should be conducted with these next-generation ensemble ML weather models, and we add a statement to the discussion to highlight this important point.}
 
-\vspace{1ex}
+\vspace{1ex} \todo{(Mark) I don't think this text has been added to the manuscript?}
 \noindent \textcolor{cadmiumgreen}{\textit{Future huge ensembles should be conducted with ML models that are trained to be ensemble forecasts from end to end.  The extreme diagnostics pipeline presented in \cite{Mahesh2024hugeensemblesidesign} should be used to evaluate the extremes of these models, and upon successful completion of these diagnostics, huge ensemble experiments can be conducted with these models.  These models have better weather forecast skill than SFNO-BVMC, and they can be used to investigate .}}
 \vspace{1ex}
 
@@ -171,17 +203,25 @@ This concern is sharpened by the fact that the ``exceptionally unlikely" tempera
 
 A process-level diagnostic for at least one or two flagged regions (Greenland and central US would be a natural contrast) - comparing HENS and IFS large-scale circulation (z500, jet position, blocking indices), low-level humidity, a soil-moisture proxy, and 2 m temperature jointly in the most extreme members - would substantially strengthen the physical interpretation. Should HENS prove over-dispersive at this lead time, that finding could be openly acknowledged together with its implications for the headline claim. For the high-latitude exceedances specifically, a brief sensitivity check of the 2 m vs surface temperature distinction would help readers calibrate confidence.
 
-\newTxt{We appreciate the reviewer's raising the issue of HENS's validity at the tail of the distributions, particularly concerning the ``exceptionally likely'' temperatures occuring primarily at high latitudes (Russia, Alaska, and Canada) but with contributions from, e.g., northern Africa.  First, we should note that the first of the two HENS papers cited in this manuscript (Mahesh et al., 20225a, \href{https://doi.org/10.5194/gmd-18-5575-2025}{10.5194/gmd-18-5575-2025}) goes well beyond the assertion that we only checked ``bulk level validation of SFNO -- i.e, good performance on standard average forecast-skill metrics'' We refer the reviewer in particular to $\S$3.3 in the first HENS paper concerning ``Extreme diagnostics,'' where we verify that SFNO exhibits excellent performance on the same diagnostics used by ECMWF and NCEP \textbf{specifically} to evaluate their NWP forecasts of extremes, namely :
+\newTxt{We appreciate the reviewer's raising the issue of HENS's validity at the tail of the distributions, particularly concerning the \textit{exceptionally likely} temperatures occuring primarily at high latitudes (Russia, Alaska, and Canada) but with contributions from, e.g., northern Africa.  First, we should note that the first of the two HENS papers cited in this manuscript \citep{Mahesh2024hugeensemblesidesign} % (Mahesh et al., 20225a, \href{https://doi.org/10.5194/gmd-18-5575-2025}{10.5194/gmd-18-5575-2025}) 
+goes well beyond the assertion that we only checked ``bulk level validation of SFNO -- i.e, good performance on standard average forecast-skill metrics.'' We refer the reviewer in particular to $\S$3.3 in \cite{Mahesh2024hugeensemblesidesign} concerning ``Extreme diagnostics,'' where we verify that SFNO exhibits excellent performance on the same diagnostics used by ECMWF and NCEP \textbf{specifically} to evaluate their NWP forecasts of extremes, namely:
 \begin{itemize}
     \item ECMWF's Extreme Forecast Index;
     \item Receiver operating characteristic curves; 
     \item The threshold-weighted continuous ranked probability score (twCRPS); 
     \item Reliability diagrams, which measure the forecast probability to the observed occurrence.
 \end{itemize}
-Likewise, we refer the reviewer to the second of the two HENS papers cited in this manuscript (Mahesh et al., 2025, \href{https://doi.org/10.5194/gmd-18-5605-2025}{10.5194/gmd-18-5605-2025}), where we show a confusion matrix (Figure~12b) that convincingly demonstrates that HENS has superior performance relative to ECMWF's IFS for capturing surface heat extremes.  All five of these test metrics are computed for 2m~surface air temperature, the quantity of interest here, and the quantitative performance of HENS and IFS (discussed at length in these two HENS papers) are comparable for all five tests. \\*[1em]
-To further demonstrate the realism of the extreme surface air temperatures produced by HENS, we have added two figures in the supplemental materials accompanying the main manuscript (Fig.~\ref{fig:Misses_Ground_Truth} and~\ref{fig:IFS_bias_vs_ERA5}).  The first figure shows that IFS misses the true observed high temperatures at 10 times the rate of HENS.  These misses occur in some of the same regions, namely eastern China, northern Africa, and central America, flagged by this reviewer.  The second figure shows that the largest underestimates of IFS of the true maximum surface air temperatures occur over many of the high-latitudes regions, namely Alaska, Greenland, and northern Russia, also flagged by this reviewer, as well as Antarctica, which was not.  HENS's estimates of the highest surface temperatures are, effectively unbiased in the same regions.\\*[1em]
+Likewise, we refer the reviewer to the second of the two HENS papers cited in this manuscript \citep{Mahesh2024hugeensemblespartii}, % (Mahesh et al., 2025, \href{https://doi.org/10.5194/gmd-18-5605-2025}{10.5194/gmd-18-5605-2025}), 
+where we show a confusion matrix (Figure~12b of the aforementioned paper) that convincingly demonstrates that HENS has superior performance relative to ECMWF's IFS for capturing surface heat extremes.  All five of these test metrics are computed for 2m~surface air temperature, the quantity of interest here, and the quantitative performance of HENS and IFS (discussed at length in these two HENS papers) are comparable for all five tests. \\*[1em]
+To further demonstrate the realism of the extreme surface air temperatures produced by HENS, we have added two figures in the supplemental materials accompanying the main manuscript (Fig.~\ref{fig:Misses_Ground_Truth} and~\ref{fig:IFS_bias_vs_ERA5}).  The first figure shows that IFS misses the true observed high temperatures at 10 times the rate of HENS.  These misses occur in some of the same regions, namely eastern China, northern Africa, and central America, flagged by this reviewer.  The second figure shows that the largest underestimates of IFS of the true maximum surface air temperatures occur over many of the high-latitudes regions, namely Alaska, Greenland, and northern Russia, also flagged by this reviewer.  HENS's estimates of the highest surface temperatures are, effectively unbiased in the same regions.\\*[1em]
 We submit that the evidence from the two HENS papers and these two supplemental figures clearly establish that ``the tail-end states it [SFNO] generates correspond to plausible physical realizations'' without the ``substantial uncertain[ty]'' raised in this comment.
 }
+
+\newTxt{In response to your feedback, we have added the following text to lines XX-XX:}
+
+\newTxt{\sl In addition to the extensive verification of SFNO being fit-for-purpose for studying the most extreme heatwaves, we include two supplemental figures to demonstrate the physical realism of the extreme surface air temperatures produced by HENS. For the summer of 2023, Supplemental Figure SXX shows that a physics-based NWP model (IFS) misses the true observed high temperatures at 10 times the rate of HENS. Additionally, Supplemental Figure SXX  shows that the largest underestimates of IFS of the true maximum surface air temperatures occur over high-latitudes regions as well as eastern China, northern Africa, and central America. The ML-based estimates of the highest surface temperatures are effectively unbiased in the same regions. Taken together, the evidence from these two supplemental figures clearly establish that the tail-end states generated by SFNO correspond to plausible physical realizations.
+}
+
 \end{enumerate}
 
 
@@ -203,19 +243,34 @@ The work of Risser et al. presents a reforecast of the summer 2023 using the SFN
 \begin{enumerate}
     \item The framing of the question addressed in this paper is not clear to me. In L81-84, the authors talk about several types of extremes (tropical cyclones and atmospheric rivers) that are not addressed afterwards, and more importantly they frame the question as if with their ensemble they can evaluate how these extremes “respond to warmer conditions.” If I understood correctly the warmer conditions here means the warm summer 2023, but I find this framing incorrect from a climatological point of view: the 2023 was warm globally because of a strong ENSO event, thus +1.43C is not a climatological level of warming because it includes the ENSO variability. To investigate a response of extreme events, you have to put them in a climatological context, comparing the climatology of events with different warming levels. Here because you use only one summer and only one warming level you cannot address this question. Then another framing is given in L85-87: “we examine whether ML emulators can generate heatwave storylines that are more intense than those found in conventional numerical weather prediction (NWP) ensembles,'' and I am not sure I see why this question should be interesting: if you simulate more members you will have more extreme events, this is an immediate statistical result that does not depend on using a physical or ML model – the contrary would be surprising. We could ask whether the more extreme events simulated by the ML model are physically meaningful (which is far from a given a priori because they are probably not in the training data set of the model as shown by the comparison with the ERA5 reanalysis), but this is not what the authors do here. I also have difficulties making sense of sentences like this one: L176 “given the large-scale atmospheric state of summer 2023, how extreme could heatwaves have plausibly been?” $\rightarrow$ I am not sure what the large-scale atmospheric state of summer 2023 means: at first order if you fix the large-scale atmospheric state (such as in nudging simulations for example) you condition extremely strongly the surface variables (especially temperature) so that the range for creating way more extremes is very limited (see Fig. 2 in León-FonFay et al. (2026) for example). This is not what the authors do here.
 
-    \newTxt{MDR: Some of this is fair and can be addressed by re-writing the introduction. Remove discussion of TCs and ARs, talk about response under warming conditions but acknowledge dependence on extreme ENSO state, etc. Clarify the main hypothesis of the paper.}
+    % \newTxt{MDR: Some of this is fair and can be addressed by re-writing the introduction. Remove discussion of TCs and ARs, talk about response under warming conditions but acknowledge dependence on extreme ENSO state, etc. Clarify the main hypothesis of the paper.}
+
+    \newTxt{We thank the reviewer for raising this point and apologize for the unclear framing of the paper overall. The abstract and introduction now clearly state the overall objective of our manuscript: how much worse the record-breaking 2023 boreal summertime heat extremes might plausibly have become, given identical large-scale conditions (lines XX-XX and XX-XX). In response to your feedback we have removed mention of non-heat-related extremes, as well as reference to the specific warming level associated with 2023. Furthermore, we attempt to provide a clear definition of what is meany by ``the large-scale atmospheric state'' in the new Section 2.1 (lines XX-XX) as well as a clear set of criteria for data sets that can be used to cleanly answer this question.}
 
 
 
     \item Use of only one summer reforecast: the authors claim that with their approach they can sample more natural variability realizations (e.g. L169 “Our results use IFS and HENS to generate storyline simulations (Shepherd et al.,2018) of the summer of 2023. These storylines represent plausible alternative outcomes arising from different realizations of internal variability, with ERA5 reanalysis serving as one observed realization”). While this is partly true, they probably underestimate by far the natural variability, especially because they are so tied to the 2023 summer which was very peculiar given the presence of a strong ENSO. Thus it is difficult to know how to interpret the extremes they are simulating in a broader context. 
 
-    \newTxt{Need some help from Ankur (see email).}
+    \newTxt{We agree that our analysis is tied to summer 2023.  This is a deliberate design choice and a defining feature of the study, not a limitation. HENS is not intended to estimate natural variability across all climatological conditions; it is a deep dive into the temperature extremes that could plausibly have occurred during that specific summer.
+We clarify a distinction that we think underlies the reviewer's concern. There are two notions of internal variability at play: seasonal-to-interannual variability, of which ENSO is a component and which sets the large-scale state of the summer; and weather-scale variability, the forecast uncertainty that grows from  over 15-day horizons. Our ensemble samples the latter, conditioned on the former. Because each member is a short (15-day) forecast, the large-scale seasonal state, including the 2023 ENSO conditions, is held essentially fixed across all 7,424 members. This is by construction the aim of a storyline framework \citep{Shepherd2018}: to hold the observed large-scale drivers fixed and ask how extreme weather could plausibly have been given that state. The HENS forecasts, and thus the subsequent analysis of extremes, are conditioned on summer 2023.}
+
+\newTxt{The conventional approach to sampling these short-horizon evolutions uses small NWP ensembles, whose limited size truncates the forecast distribution and misses roughly 6\% of events (Fig. S10 in the new manuscript). We address this by expending our full compute and memory budget on a massive ensemble of a single summer, rather than smaller ensembles spanning many summers. We do not aim to characterize the full climatological distribution of extremes or to estimate return periods; we aim to improve sampling of the short-term forecast distribution conditioned on the observed summer.}
     
     \item Because there are way more members in the ML reforecast, I was expecting that the ML driven extremes would always be more intense than the IFS ones are. The fact that this is not the case (Figure 1) is to me the most surprising and interesting finding but this is not really investigated by the authors here. This  suggests that the physics simulated by the ML model and IFS are different at 10-day lead time and cast doubts on the reliability of the rest of the analyses. Also note that most of the red regions appear to happen in the Southern Hemisphere, where it is actually winter. In general in the SH the extremes simulated are winter extremes, not absolute extremes.
 
-    \newTxt{See also the email from Ankur. Mark TODO: Tally the fraction of day-10 forecasts where HENS max $>$ IFS max.}
+    \newTxt{We thank the reviewer for this observation, which we agree highlights a genuinely interesting feature of the comparison. We would push back, however, on the inference that it casts doubt on the reliability of the downstream analyses. We believe the pattern is expected once the comparison is understood, and we clarify this below.}
     
-    \item Lead time: the authors choose to investigate the properties of the extremes resampled using a 10-day lead time. This is a crucial choice in their analysis because if they change this lead time most of their results will probably dramatically change: for example a 1-day lead time would probably lead to only moderately more intense extremes. I think 10-day is a reasonable choice but the sensitivity of their results to this choice should be examined. More importantly, how do you know whether both the IFS ensemble and your ML ensemble are providing physically meaningful results at such long lead times? I think we may have reasons to doubt that:
+\newTxt{HENS and IFS are distinct modeling systems with different climatological biases, and Figure 1 compares the summertime maximum of each, which is not necessarily from the same event at the same time. A larger ensemble increases the chance of sampling a rare tail event, but it does not override a systematic offset in the underlying model. If IFS has a warmer ensemble mean forecas  for any one particular forecast, or a sharper representation of a particular extreme, it can produce a warmer grid-cell maximum even with far fewer members. In particular, ERA5 (the training dataset for HENS) and IFS have different spectra. ERA5 has a somewhat smoother energy spectrum than IFS (see Fig. S17 of \citet{Zhong2025} and Appendix A of \citet{Mahesh2024hugeensemblesidesign} for a demo) and damps the sharpest small-scale extremes on a per-member basis. HENS's advantage therefore derives from ensemble size sampling the tail.  The difference between the maxima is the expected behavior of two different systems, not evidence of an error.}
+
+\newTxt{Crucially, our central claim does not rest on the raw maximum comparison, because that comparison confounds ensemble size with model bias. We address this with two complementary controls. First, and most directly relevant to the reviewer's concern about differing physics: in Figures 2 and S8 we subsample HENS to a 58-member ensemble and apply the same GEV extrapolation used for IFS (we call this HENS-58). Because HENS-58 and HENS share the same modeling system, this comparison removes the confounding factors of different models entirely. HENS-58 and HENS are an apples-to-apples comparison, and the only difference between them is ensemble size. In the update manuscript, we find that full HENS still exceeds the HENS-58 GEV extrapolation (Figure 1), which demonstrates that the huge ensemble reaches tail states that GEV fitting to a small ensemble of the same model cannot recover. Whatever differences exist between HENS and IFS physics, they cannot explain this gap.}
+
+   % \newTxt{Finally, the reviewer correctly notes that many of the cells where IFS exceeds HENS fall in the Southern Hemisphere, where June–August is austral winter. Because our study targets boreal-summer heat extremes, the "summertime maximum" in these cells is a winter value and not one of the dangerous heat events the paper is concerned with. Differences between IFS and HENS in this off-season regime are therefore both expected, neither model is being pushed toward its warm tailand largely inconsequential for our conclusions. We will state this explicitly in the revised text so that the SH exceedances are read as an off-season model comparison rather than a comparison of extreme heat.}
+    
+    \item Lead time: the authors choose to investigate the properties of the extremes resampled using a 10-day lead time. This is a crucial choice in their analysis because if they change this lead time most of their results will probably dramatically change: for example a 1-day lead time would probably lead to only moderately more intense extremes. I think 10-day is a reasonable choice but the sensitivity of their results to this choice should be examined. 
+
+    \newTxt{Thank you for raising this point.  For looking at 1-day lead times or similarly lead times, datasets like ERA5, IFS, and HENS are likely not suitable.  At these lead times, the dominant uncertainties are at much finer spatial and temporal scale than a 25-km spatial resolution and 6-hourly temporal resolution like HENS.   Instead the dominant uncertainties happen at smaller spatial scales (particularly convective scales), and other models and datasets would be more appropriate.  One example could be the km-scale High-Resolution Rapid Refresh analyiss and forecast dataset from NOAA, along with the corresponding ML emulators. \citep{}.  To look at the sensitivity of lead time, we do validate that the properties of HENS remain constant at lead times of 4 and 7 days \citep{Mahesh2024hugeensemblespartii}.  In this manuscript, we do not believe that replicating the analysis at these other lead times is necessary, since the dominant sources of uncertainty (synoptic-scale weather) are similar to the chosen 10-day lead time. Additionally, looking at these other lead times would not be an apples-to-apples comparison, since 2m temperature has a different spread-error ratio at lead times of 4 days vs. 10 days.  This is an important criteria for our ensemble (see Criteria \#1 in Section 3 of the manuscript).  We agree that lead time sensitivity is a promising avenue for future work, particularly with newer models that have better spread-error ratios and with high-resolution models.}
+    
+    More importantly, how do you know whether both the IFS ensemble and your ML ensemble are providing physically meaningful results at such long lead times? I think we may have reasons to doubt that:
 
     \begin{enumerate}
     \item if the two models are not simulating the land dynamics, then at this lead time this is a major caveat for the dynamics of extremes 
@@ -227,7 +282,15 @@ The work of Risser et al. presents a reforecast of the summer 2023 using the SFN
 
     \item GEV analysis: I have major reservations with respect to the GEV analysis. The first one is that it is far from clear that you can indeed fit a GEV law over the maxima from the different ensemble members. My main reservation is that the members are probably not independent (contrary to what is claimed in L52-53 in the supplementary material): if you imagine that you have one intense heatwave over the summer at one grid point, the maxima over the summer will probably come from starting dates around this pre-existing maxima for all or most ensemble members, which means that the maxima will come from essentially similar events (similar to ensemble boosting, see Bloin-Wibe et al. (2025)). The use of a 10-day lead time partially alleviates the problem but I don’t think you can assume that the members are independent: they are extremely strongly tied to the dynamics of the 2023 summer, and to its oceanic variability, as you also argue at several places in the paper. Moreover, fitting a GEV over 50 data points likely strongly underestimates the probability of unseen extremes (see Zeder et al. (2023)). Nevertheless, I don’t see why you need this GEV analysis: why not compare directly the output distributions and/or the empirical quantiles?
 
-    \newTxt{Response: argue ``conditional'' independence which is what we're trying to show; make a plot of which day the HENS maxima come from or barplot of which days yield the maxima; fair point about fitting GEV to 50 data points; empirical ensembles max out at $1-1/50$ but see previous point comparing IFS and HENS for quantile = 0.5 to 0.98.}
+    % \newTxt{Response: argue ``conditional'' independence which is what we're trying to show; make a plot of which day the HENS maxima come from or barplot of which days yield the maxima; fair point about fitting GEV to 50 data points; empirical ensembles max out at $1-1/50$ but see previous point comparing IFS and HENS for quantile = 0.5 to 0.98.}
+
+    \newTxt{Thank you for this feedback. In response to your comments we have now added an extensive vetting of using the GEV distribution for both the IFS and HENS-58 subset ensemble (main text lines XX-XX and supplement section 1.3). Ultimately, the new analysis gives us high confidence that GEV theory has been appropriately applied and provides a firm foundation for all future statements regarding the GEV analysis.}
+
+    \newTxt{Regarding your point about independence, we fully agree that the ensemble is strongly tied to the dynamics and ocean variability of the 2023. However, this is the point --- we want our data sets and extreme threshold estimates to be explicitly tied to these conditions. The GEV analysis is also designed to be conditioned on the large-scale environment in 2023. However, we argue that the ensembles are \textbf{conditionally} independent: the members are independent given the 2023 conditions. This is now described in Section 2.2 lines XX-XX. The conditional nature of the data sets used is also why we talk about extreme thresholds and not return values, since the latter represent climatological (\textbf{unconditional}) quantities (this is described in Section 2.5 lines xX-XX and Supplemental Section XX lines XX-XX).}
+
+    \newTxt{We also agree that fitting a GEV to 50 data points can result in failing to character extremes well beyond the range of the data (e.g., the 0.999 quantile considered as the extreme threshold of interest). This is essentially the main point of the manuscript --- the brute force sampling of a huge ensemble obviates the need to extrapolate to potentially dangerous levels using GEV distributions. Our comparison of HENS with HENS-58 and HENS-58-GEV illustrates this point, which is also reflected in the new third Key Point at the beginning of the manuscript.}
+
+    \newTxt{Finally, we use the GEV analysis since we want to evaluate the most extreme heatwave events, which are well beyond the range of $\mathcal{O}(50)$-member ensembles.}
     
 \end{enumerate}
 
@@ -235,56 +298,111 @@ The work of Risser et al. presents a reforecast of the summer 2023 using the SFN
 
 \begin{enumerate}
     \item  L22: what is a weather scenario? How is this different from a storyline?
+
+    \newTxt{Thank you for pointing this out -- we have changed ``weather scenario'' to ``storyline forecast''.}
     
     \item L24: Exceeding in what sense and with respect to which baseline?
+
+    \newTxt{This implies an absolute exceedance compared to realized ERA5 and IFS, not relative to a baseline.}
     
     \item L62: what does “counterfactual” mean in this context?
+
+    \newTxt{This term is borrowed from the referenced paper (Fischer et al., 2023). It refers to assessing different initial conditions that did not occur in reality and are hence counterfactual.}
     
     \item L77-78: Note that more recent works have challenged the idea that 2023 is unpredicted/incompatible with climate models, e.g. Gyuleva et al (2025) and references therein, especially because there is a difference between a high GMST conditional on ENSO being well predicted or conditional on ENSO being poorly predicted. In 2023 the bad forecast of GMST seems to have been more related to mis-forecasted ENSO.
 
+    \newTxt{Thank you for raising this point. We have now included a reference to \cite{Gyuleva2025} acknowleding their findings on line XX.}
+
     \item L100: note that the IPCC report usually uses the term LLHI for tipping points of the climate system rather than temporary weather extremes (though this term tends to be used inconsistently, I acknowledge).
+
+    \newTxt{Thank you for this comment.}
 
     \item L107-108: I don’t think this is true, rare events algorithms (e.g. Noyelle et al. (2025), Bloin-Wibe et al. (2025) or Finkel et al. (2026) ) are another computationally less expensive way to study these events and they don’t require huge ensembles.
 
+    \newTxt{Fair point. We have removed the referenced text.}
+
     \item L123: It would probably be good to write down explicitly how the heat index is computed, either here or in the supplementary information.
+
+    \newTxt{We have now removed all mention and analysis of the heat index from this manuscript for space considerations.}
     
     \item L127: “This reanalysis provides all the data required to construct the daily maximum surface temperature” $\rightarrow$ I don’t understand what you mean with this sentence.
 
+    \newTxt{Our apology for the confusing sentence. This text has been removed.}
+
     \item Figure 1: I think you should add an x-axis description below the bar plots, it took me some time to realise it was linked to the color bar on maps. Is the comparison with ERA5 made after detrending? If not, then it is not unexpected that the extremes are larger in IFS (with 50 members you should find extremes only slightly above the ones of the 38 years from ERA5 that you are using): you are comparing things in a different climate state.
+
+    \newTxt{Thank you for this feedback. Figure 1 is now quite different, but we took your suggestion and added temperature bin labels to the x-axis of the bar plots.}
 
     \item L184-197: again I have difficulties to identify the added value here, I don’t see why we should have expected the contrary.
 
+    \newTxt{This text has been removed and replaced with a set of comparisons that we hope more clearly describes the added value.}
+
     \item L208: “In some cases, this exceedance is considerable” $\rightarrow$ considerable with respect to what? The climatological standard deviation of temperature and especially extreme temperatures increases with latitudes, it is thus expected that the exceedances are larger in higher latitude regions, but they may not be when considering standardized temperature (actually they may still be because the climatological skewness tends to also increase with latitudes, but this still needs to be taken into account when saying that exceedances are “considerable”). I appreciate the in-depth look at the Greenland anomalies and I am not surprised that you can find large differences, which is coherent with the literature on extremes over ice regions (e.g. Wei et al. (2023)) that shows that they can be high. In particular note that the surface temperature of ice is by definition capped at 0C (because ice is melting at this temperature), which allows a large difference with the air above, especially if it is advected from climatologically warmer regions. Note also, that 2-m temperature may be not always resolved in models, and sometimes results from an interpolation between the lowest atmospheric model level and the surface temperature, this may explain some of the discrepancies you have in this and other regions.
+
+    \newTxt{Thank you for these comments. We have now removed all mention of ``considerable'' exceedances and instead focus on differences in the within- and between-model comparisons across ensemble size.}
     
     \item L215: “The spatial distribution and magnitude of these exceedances provide important information about where else might have experienced an extreme heatwave.” $\rightarrow$ again, conditional on the SSTs used as boundary conditions of summer 2023 I don’t see why we should expect anything else than every region on Earth might be experiencing an extreme heatwave during this summer, and more extreme than the one(s) actually experienced. I am not sure what the huge ensemble provides besides better sampling.
+
+    \newTxt{The referenced text has been removed in the new results section.}
     
     \item L229: Note that with a N-member ensemble, the 1/N percentile is not well estimated by the last member. A rule of thumb is usually to have at least 10 members above the percentile to estimate it precisely, with 50 members it means that the best empirical quantile is more around 100*(1-1/40)=97.5\%.
+
+    \newTxt{Thank you for this comment. All of our analysis either looks at the ensemble maxima (without trying to estimate a specified threshold) or GEV-based extrapolation to quantiles beyond the range of the data.}
     
     \item Figure 2: I am not sure I understand the need to express the probability found by the authors in IPCC language terms. I find it misleading because those IPCC likelihood statements usually refer to other things. I don’t understand why the authors do not rather use a standard statistical test to compare the two distributions, including in their tail and quantify the probability that the IFS and HENS are statistically different, in their tail or in their core.
 
-    \newTxt{Distributional tests are highly sensitive to sample size. With 7424 HENS numbers you may end up with ``statistically significant'' differences that are practically not significantly different. Ultimately most interested in extreme tail beyond range of IFS data anyway.}
+    \newTxt{Thank you for raising this issue. The IPCC calibrated language consists of two parts, a likelihood statement and a confidence statement. Table 1 of \cite{mastrandrea2010guidance} defines the likelihood level and the text of the document explains ``It can be used to express a probabilistic estimate of the occurrence of a single event or of an outcome \dots Likelihood may be based on statistical or modeling analyses, elicitation of expert views, or other quantitative analyses.'' Thus, the guidance explicitly calls for associating statistical confidence levels with likelihood statements. The reported IPCC categories qualify a probability that the IFS-GEV extreme threshold is statistically different from the corresponding HENS quantity.}
+
+    % \newTxt{Distributional tests are highly sensitive to sample size. With 7424 HENS numbers you may end up with ``statistically significant'' differences that are practically not significantly different. Ultimately most interested in extreme tail beyond range of IFS data anyway.}
 
     \item L299: “As it is a storyline simulation, this quantity does not correspond to a specific probability or a return level: rather, we use it as a benchmark for the summertime maximum to guide stakeholder extremes preparedness” $\rightarrow$ I find this sentence extremely misleading, especially for stakeholders. The way I understand it, the authors would provide extreme levels of heat index to stakeholders, with no climatological, probabilistic, physical or climate change contextualization: simply saying this level is possible (if you trust the ML model). I don’t understand how this can be helpful to anyone for preparedness.
+
+    \newTxt{We apologize for any confusion. The referenced text (and the entire section) has been removed from the manuscript.}
     
     \item L305-306: I don’t understand how the figure supports the statement, please detail.
 
+    \newTxt{This text (and the figure) has been removed from the manuscript.}
+
     \item L310-312: Was it controversial that larger ensembles sample more extremes? How is your ensemble useful if it is so tied to one summer?
-    
+
+        \newTxt{This text has been removed from the manuscript.}
+
     \item L324-328: this is all the point of the analysis: because you are so tied to the summer 2023, depending on how extreme events behave during this summer you have vastly different results from one region to another as reflected by Figure 3 panel b. But I am not sure what you can conclude from this figure.
 
+    \newTxt{This text has been removed from the manuscript.}
+
     \item L339: “The implication is that traditional ensemble forecasts can, in some cases, substantially underestimate the realized extreme heat risk” $\rightarrow$ this statement is either obvious or unsupported: if you mean that limited size ensembles do not go far in the tail of the distributions, this is obvious ; if you mean that the 50 ensemble members systematically underestimate the real world spread and thus the heat risks, I don’t think this is what you have demonstrated.
-    
+
+        \newTxt{This text has been removed from the manuscript.}
+
     \item L347-350: I do not understand this statement. First, given the rapid pace of warming, at the global scale it is likely that almost all future summers will have a GMST at least equivalent to the one of 2023. But again 2023 temperature is peculiar because it is linked to a strong ENSO, you cannot infer something climatological from that: a strong ENSO event means cooler summer in some regions. Second, I don’t see why climate change enters in the results of your analysis, this is not a question you have investigated. 
+
+    \newTxt{Thank you for this feedback. We have changed this sentence to begin with ``In light of the fact that the 2023 record temperatures have already been exceeded by subsequent summers, ...'' (line XX).}
     
     \item L354-358: “Instead, for both the 2m air temperature and heat index, we find that the global land surface partitions into three roughly equal regimes: regions where HENS maxima fall well within the GEV upper bounds derived from IFS, regions where HENS maxima are comparable to those bounds, and regions where HENS maxima exceed the GEV-implied threshold entirely. This three-way partition is not prescribed by theory and represents an emergent property of HENS.” $\rightarrow$ besides the reservations with regards to the use of a GEV expressed above, I do not see why this is surprising or unexpected: if you sample randomly a high threshold and you imagine that the HENS gives you the actual value of the high threshold, then statistically your limited-size ensemble will be sometimes below, sometimes at the right level and sometimes above, which is pretty much what you find. I have the impression that this result simply comes from the limited sampling of the IFS ensemble.
+
+    \newTxt{This is a fair point, and we agree that discrepancies between IFS-GEV and HENS are due to the limited sampling. However, this is the entire point of the manuscript. Furthermore, it is one thing to expect that limited sampling will lead to biased extreme thresholds, and another to quantify the magnitude and sign of this bias as well as the spatial pattern of this bias.}
     
     \item L359: “This behavior indicates that HENS is not merely resampling the IFS tail. Instead, it is generating extreme weather states that are unexplored by the IFS ensemble’s sample of summer 2023 internal variability” $\rightarrow$ I do not understand this statement. Wouldn’t it be worrying if the HENS is doing something else than resampling the IFS tail? If the ML model has learned the right physics, this is what it should do. Moreover, I am not sure what are “unexplored extreme weather states”: if I fit a GEV to the IFS model and then sample more extremes from this GEV, am I sampling the tail or generating unexplored weather states?
+
+   \newTxt{We thank the reviewer for their question and appreciate the chance to clarify our intention.  We apologize for the ambiguity around phrases such as ``unexplored weather states" and have removed them.  We originally meant to say that HENS can sample beyond the IFS ensemble maximum and the IFS-GEV estimate of the maximum.  We have rephrased the paragraph to:}
+   
+   \newTxt{\sl We find that the global land surface partitions into three roughly equal regimes: regions where HENS maxima fall well within the GEV upper bounds derived from IFS, regions where HENS maxima are comparable to those bounds, and regions where HENS maxima exceed the GEV-implied threshold entirely. This three-way partition is not prescribed by theory and represents an emergent property of HENS. Relative to HENS-58-GEV, these three regimes cover roughly 20\%, 30\%, and 50\% of global land area, respectively (Figure S6a). Notably, the proportion of land area where HENS exceeds the GEV bound is larger for HENS-58-GEV than for IFS-GEV. Ultimately, HENS reveals an envelope of plausible meteorological extremes that traditional extreme value theory and smaller ensembles fail to capture.}
     
     \item L368-369: “Machine learning weather models offer a turnkey solution, enabling global storyline simulations without the infrastructure and specialized knowledge required by conventional approaches” $\rightarrow$ how is this compatible with generating and analyzing petabytes of data? With the access to starting conditions from ERA5 (with all the infrastructure that is behind to generate them)? The use of bred vectors to create an ensemble? The statistical and physical knowledge to evaluate the quality of the trajectories simulated? I strongly advise the authors to critically reconsider their arguments in the last paragraph of the conclusion.
+
+    \newTxt{Thank you for raising this comment. We agree that most researchers will not have the computational resources or storage to generate and analyze multiple petabytes of data. However, as a general tool, ML-based forecasting is revolutionary in that the time to generate an ensemble member is orders of magnitude faster than existing methods.  Additionally, we note that the massive dataset size of HENS is due to the fact that the dataset is global 25km dataset with 1 million grid cells.  The dataset size can be shrunk by a factor of 1000 or more if a stakeholder only wants to run storylines for their specific region.  We have softened our language to acknowledge these points: the following text is on lines XX-XX.}
+
+    \newTxt{\sl We acknowledge that computational and resource limitations may prevent the generation and analysis of huge ensembles. However, ML-based forecasting is still a broadly accessible tool for smaller ensembles.}
     
     \item L55 in supplementary material: statistically independent with respect to what probability space?
+
+    \newTxt{This simply refers to the fact that, a priori, we do not make any assumptions about how the GEV parameters inter-related with each other.}
     
     \item L57 in supplementary material: I am not sure I understand the priors here, how can the prior for the location parameter be constant, over which range of $\mu$ values?
+
+    \newTxt{A constant prior is used to impose exactly zero a priori knowledge on the values of $\mu$. This is a so-called ``improper'' prior since the associated probability density function does not integrate to 1, as is required for proper statistical distributions. However, the cited references verify that this still yields valid inference. In response to your comment, we added the following text to the supplement (lines XX-XX): ``Note that the prior for the location parameter is an improper prior (i.e., its probability density function does not integrate to 1) and imposes no assumptions on the values it may take on. This nonetheless yields valid posterior inference.'' }
+    
 \end{enumerate}
 
 

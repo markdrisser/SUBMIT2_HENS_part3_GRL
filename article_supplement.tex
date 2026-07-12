@@ -158,7 +158,7 @@ $^{#1}$#2\relax}\vskip-\parskip}}
 \subsection{Extreme value analysis} \label{sec_eva}
 
 As described in the main text, %Section~\ref{sec:goals_data}, 
-the focus of our analysis are on 2m temperature and heat index values from the 240, 246, 252, and 258 hour lead times (approximately day 10 of each forecast) across all initialization days \newTxt{from the IFS and HENS-58 ensembles}. \newTxt{For each ensemble, l}et $X^{ij}_{dl}$ denote the variable of interest for grid box $\{\bg_i: i=1,\dots,N_\text{grid}\}$, ensemble member $j=1, \dots, N_\text{ens}$, initalization date $d = 1, \dots, 92$, and lead time $l \in \{240, 246, 252, 258\}$. Then, we define $Y_{ij} = \max_{d} \max_{l} X^{ij}_{dl}$. % denote the extreme six-hourly measurements for grid box $\{\bg_i: i=1,\dots,N_\text{grid}\}$ and ensemble member $j=1, \dots, N_\text{ens}$. 
+the focus of our analysis are on 2m temperature \st{and heat index} values from the 240, 246, 252, and 258 hour lead times (approximately day 10 of each forecast) across all initialization days \newTxt{from the IFS and HENS-58 ensembles}. \newTxt{For each ensemble, l}et $X^{ij}_{dl}$ denote the variable of interest for grid box $\{\bg_i: i=1,\dots,N_\text{grid}\}$, ensemble member $j=1, \dots, N_\text{ens}$, initalization date $d = 1, \dots, 92$, and lead time $l \in \{240, 246, 252, 258\}$. Then, we define $Y_{ij} = \max_{d} \max_{l} X^{ij}_{dl}$. % denote the extreme six-hourly measurements for grid box $\{\bg_i: i=1,\dots,N_\text{grid}\}$ and ensemble member $j=1, \dots, N_\text{ens}$. 
 Since the $\{Y_{ij}\}$ arise as the maximum of a stochastic process over a specified time interval or ``block,'' Theorem~3.1.1 of \cite{Coles2001} states that the cumulative distribution function (CDF) of $Y_{ij}$ can be well approximated by a member of the Generalized Extreme Value (GEV) family of distributions,
 \begin{equation} \label{gev_fam}
 F_i(y) \equiv \mathbb{P}(Y_{ij} \leq y) = \exp\left\{-\left[ 1 + \xi_i\left(\frac{y - \mu_i}{\sigma_i}\right) \right]^{-1/\xi_i} \right\}, \hskip1ex \forall \hskip1ex y \hskip1ex \text{s.t.} \hskip1ex 1 + \xi_i(y - \mu_i)/\sigma_i > 0,
@@ -214,10 +214,10 @@ Furthermore, we use the optimally-noninformative priors for Bayesian analysis of
     \begin{array}{rcl}
         p(\mu_i) & \propto & 1 \\[0.5ex]
         p(\sigma_i) & \propto & 1/\sigma_i \\[0.5ex]
-        p(\xi_i) & \propto & \exp\{-0.577215(1+\xi_i)\}, \hskip3ex \xi_i > -0.5
+        p(\xi_i) & \propto & \exp\{-0.577215(1+\xi_i)\}, \hskip3ex \xi_i \in (-0.5, 0).
     \end{array}
 \end{equation}
-\citep{Zhang2024}. For simplicity, we apply this statistical model separately to each \st{IFS} \newTxt{$0.25^\circ \times 0.25^\circ$} grid box.
+\citep{Zhang2024}. \newTxt{Note that the prior for the location parameter is an improper prior (i.e., its probability density function does not integrate to 1) and imposes no assumptions on the values it may take on. This nonetheless yields valid posterior inference.} For simplicity, we apply this statistical model separately to each \st{IFS} \newTxt{$0.25^\circ \times 0.25^\circ$} grid box.
 % In order to account for spatial dependence in heatwave climatology, we assume that, in the prior distribution, the GEV coefficients are a linear combination of local, compactly supported basis functions. The location parameter at grid box $i$ is written as
 % % \noindent Grid box $i$ has GEV coefficients $\{\mu_i, \sigma_i, \xi_i\}$, where
 % \[
@@ -347,7 +347,7 @@ Since the posterior distribution is not available in closed form, we resort to M
 
 % AIC scores for the four geospatial models are shown in Table~\ref{table_aic}. With $N_\text{grid} = 233,xxx$ and $N_\text{ens} = 50$, note that the log-likelihood is summed over more than 11 million data points. As expected, the log-likelihood increases with the complexity of the statistical model. However, the increase is not always enough to offset the penalty imposed by the increased flexibility. The result is that, according to the AIC,  the G4 grid (spatial scales of roughly 7,700km$^2$) is best for both 2m temperature and the heat index. All of our subsequent results will be based on these statistical models.
 
-\textbf{Best estimates of extreme temperature statistics.} Using the GEV parameter estimates, we calculate posterior median estimates of the three GEV fields (location, shape, and scale) and the extreme threshold (the 99.9\% percentile). These results are shown in Figures~\ref{fig:bestGEVt2m} and \ref{fig:bestGEVheatindex}. Note that the best estimate of the extreme threshold is the median of its posterior distribution (i.e., calculating the threshold from each individual posterior sample of the GEV fields), as opposed to the threshold calculated from the posterior median of each GEV field. % We assess the posterior median estimate since otherwise (e.g., using the posterior mean) the upper bound estimates are outrageously large (because $\xi$ is in the denominator of this formula and can be very close to zero; including these values in an average results in huge numbers).
+\textbf{Best estimates of extreme temperature statistics.} Using the GEV parameter estimates, we calculate posterior median estimates of the three GEV fields (location, shape, and scale) and the extreme threshold (the 99.9\% percentile). These results are shown in Figures~\ref{fig:bestGEVt2m} \newTxt{and \ref{fig:bestGEVt2m_HENS58} for IFS and HENS-58, respectively}. Note that the best estimate of the extreme threshold is the median of its posterior distribution (i.e., calculating the threshold from each individual posterior sample of the GEV fields), as opposed to the threshold calculated from the posterior median of each GEV field. % We assess the posterior median estimate since otherwise (e.g., using the posterior mean) the upper bound estimates are outrageously large (because $\xi$ is in the denominator of this formula and can be very close to zero; including these values in an average results in huge numbers).
 
 \begin{figure}[!t]
     \centering
@@ -363,19 +363,19 @@ Since the posterior distribution is not available in closed form, we resort to M
     \label{fig:bestGEVt2m_HENS58}
 \end{figure}
 
-\begin{figure}[!t]
-    \centering
-    \includegraphics[width=\textwidth]{Figure_GEVfields_heatindex_gridbox.png}
-    \caption{Best estimates (posterior medians) of the IFS-GEV fields and extreme thresholds for the heat index.}
-    \label{fig:bestGEVheatindex}
-\end{figure}
+% \begin{figure}[!t]
+%     \centering
+%     \includegraphics[width=\textwidth]{Figure_GEVfields_heatindex_gridbox.png}
+%     \caption{Best estimates (posterior medians) of the IFS-GEV fields and extreme thresholds for the heat index.}
+%     \label{fig:bestGEVheatindex}
+% \end{figure}
 
-\begin{figure}[!t]
-    \centering
-    \includegraphics[width=\textwidth]{Figure_GEVfields_heatindex_HENS58_gridbox.png}
-    \caption{Best estimates (posterior medians) of the HENS-58-GEV fields and extreme thresholds for the heat index.}
-    \label{fig:bestGEVheatindex_HENS58}
-\end{figure}
+% \begin{figure}[!t]
+%     \centering
+%     \includegraphics[width=\textwidth]{Figure_GEVfields_heatindex_HENS58_gridbox.png}
+%     \caption{Best estimates (posterior medians) of the HENS-58-GEV fields and extreme thresholds for the heat index.}
+%     \label{fig:bestGEVheatindex_HENS58}
+% \end{figure}
 
 
 \color{red}
@@ -395,11 +395,11 @@ One approach for checking the goodness of fit for a statistical distribution to 
     \label{fig:qq_agg}
 \end{figure}
 
-Results are shown in Figure~\ref{fig:qq_agg}. The GEV distributions from both ensembles and variables provide an excellent fit to a large majority of the data: more than 80\% of grid boxes have less than 5\% of points falling outside the confidence band. These results provide strong evidence that the GEV assumptions are satisfied and we can be confident in using the fitted distributions to assess the extreme upper tail behavior.
+Results are shown in Figure~\ref{fig:qq_agg}. The GEV distributions from both ensembles provide an excellent fit to a large majority of the data: more than 80\% of grid boxes have less than 5\% of points falling outside the confidence band. These results provide strong evidence that the GEV assumptions are satisfied and we can be confident in using the fitted distributions to assess the extreme upper tail behavior.
 
 \subsection{Comparing IFS-GEV with HENS-58-GEV}
 
-A simple comparison of the GEV fields obtained from IFS and HENS-58 can be conducted by looking at the difference in posteriors from each statistical fit. Best estimates of this difference are calculated as the difference in posterior means. To account for the uncertainty innate to fitting GEV distributions to a finite sample, we then calculate a 95\% credible interval for the difference and use stippling to denote where the uncertainty interval includes zero. 
+A simple comparison of the GEV fields obtained from IFS and HENS-58 can be conducted by looking at the difference in posteriors from each statistical fit. Best estimates of this difference are calculated as the difference in posterior medians. To account for the uncertainty innate to fitting GEV distributions to a finite sample, we then calculate a 95\% credible interval for the difference and use stippling to denote where the uncertainty interval includes zero. 
 
 \begin{figure}[!t]
     \centering
@@ -429,6 +429,15 @@ The fact that Greenland stands out so clearly with large anomalies relative to E
     \caption{Caption}
     \label{fig:hens58calib}
 \end{figure}
+
+
+\begin{figure}[!h]
+    \centering
+\includegraphics[width = \textwidth]{Figure_t2m_probContain_1000day_HENS58GEV_vs_HENS.png}
+    \caption{As in Figure 3 in the main text, comparing HENS-58-GEV and HENS.}
+    \label{fig:hens58gev_vs_hens}
+\end{figure}
+
 
 \begin{figure*}[!h]
 \centering
@@ -468,31 +477,35 @@ The fact that Greenland stands out so clearly with large anomalies relative to E
 %     \label{fig:era5_vs_hens_storyline_raw}
 % \end{figure}
 
-\begin{figure*}[!t]
-\centering
-\includegraphics[width = \textwidth]{Figure_heatindex_maxima_diff.png}
-\caption{Same as Figure 1 in the main text but for the heat index.}
-\label{fig:threeversions_heatindex}
-\end{figure*}
+% \begin{figure*}[!t]
+% \centering
+% \includegraphics[width = \textwidth]{Figure_heatindex_maxima_diff.png}
+% \caption{Same as Figure 1 in the main text but for the heat index.}
+% \label{fig:threeversions_heatindex}
+% \end{figure*}
 
-\begin{figure*}[!t]
-\centering
-\includegraphics[width = \textwidth]{Figure_heatindex_probContain_1000day.png}
-\caption{Comparison of IFS-GEV extreme event thresholds ($99.9\%$ percentile) for the heat index with corresponding empirical estimates calculated from the HENS ensemble. Panel (a) tallies the probability that the IFS-GEV threshold contains (is larger than) the HENS threshold; lighter colors indicate that HENS values are more extreme than IFS-GEV. Panel (b) tallies the difference in the IFS-GEV event threshold (the posterior median) and the HENS estimate. Panel insets show the land fraction in each color category.}
-\label{fig:probcontain_hi}
-\end{figure*}
+% \begin{figure*}[!t]
+% \centering
+% \includegraphics[width = \textwidth]{Figure_heatindex_probContain_1000day.png}
+% \caption{Comparison of IFS-GEV extreme event thresholds ($99.9\%$ percentile) for the heat index with corresponding empirical estimates calculated from the HENS ensemble. Panel (a) tallies the probability that the IFS-GEV threshold contains (is larger than) the HENS threshold; lighter colors indicate that HENS values are more extreme than IFS-GEV. Panel (b) tallies the difference in the IFS-GEV event threshold (the posterior median) and the HENS estimate. Panel insets show the land fraction in each color category.}
+% \label{fig:probcontain_hi}
+% \end{figure*}
 
 \begin{figure}
     \centering
     \includegraphics[width=1.05\linewidth]{Figure_Slide_36_by_Ankur_Misses_Ground_Truth.png}
-    \caption{(Figure 36 of \texttt{HENS Part 3\_ initial review}.) Percentage of forecasts (IFS) / hindcasts (HENS) during summer 2023 at each grid point at 10-day lead times when the ensemble-maximum 2m air temperature is less than observed (IFS) or analyzed  (HENS).  We define this condition as a ``miss.''  IFS and HENS are subject to miss rates of 7\% and 0.7\%, respectively, of the time.
+    \caption{
+    % (Figure 36 of \texttt{HENS Part 3\_ initial review}.) 
+    Percentage of 10-day forecasts initialized during summer 2023 when the ensemble-maximum 2m air temperature is less than the verification value.   We define this condition as a ``miss.'' IFS is shown on the left panel, and HENS is shown on the right.  Over global land, IFS and HENS have miss rates of 5.8\% and 0.6\%, respectively. For a fair comparison, the verification value for HENS is derived from ERA5, and the verification value for IFS is obtained from operational analysis.
     \label{fig:Misses_Ground_Truth}}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=1.05\linewidth]{Figure_Slide_37_by_Ankur_IFS_vs_ERA5_bias_in_max.png}
-    \caption{(Figure 37 of \texttt{HENS Part 3\_ initial review}.) For summer 2023, the differences between the instantaneous ensemble-maximum 2m air temperature at 10-day lead times and the corresponding temperatures from ERA5 at the verification times of these forecasts/hindcasts.
+    % \caption{(Figure 37 of \texttt{HENS Part 3\_ initial review}.) For summer 2023, the time-mean differences between the instantaneous ensemble-maximum 2m air temperature at 10-day lead times and the corresponding temperatures from ERA5 at the verification times of these forecasts/hindcasts.
+    \caption{At the time of the ERA5 summer 2023 maximum temperature, the difference between the verification value and the 10-day HENS and IFS ensemble maxima is shown. For a fair comparison, the verification value for HENS is derived from ERA5, and the verification value for IFS is obtained from operational analysis.
+    % instantaneous ERA5 maximum 2m temperature at 10-day lead times and the corresponding temperatures }
     \label{fig:IFS_bias_vs_ERA5}}
 \end{figure}
 
