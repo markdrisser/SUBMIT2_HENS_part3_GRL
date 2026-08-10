@@ -87,11 +87,11 @@ $^{#1}$#2\relax}\vskip-\parskip}}
 \linenumbers
 
 % Track changes
-\newcommand{\newTxt}{\textcolor{red}}
+% \newcommand{\newTxt}{\textcolor{red}}
 
 % Hide previous edits
-% \newcommand{\sti}[1]{\unskip}
-% \newcommand{\newTxt}{\textcolor{black}}
+\renewcommand{\st}[1]{\unskip}
+\newcommand{\newTxt}{\textcolor{black}}
 
 
 %% ------------------------------------------------------------------------ %%
@@ -154,8 +154,7 @@ $^{#1}$#2\relax}\vskip-\parskip}}
 
 \section{Integrated Forecast System data}
 
-To benchmark the information content of existing NWP ensembles, we use the 50-member ECMWF Integrated Forecast System \citep[IFS;][]{ECMWF}. IFS consists of medium-range 15-day integrations from day 0 to day 15, \newTxt{which also meet the criteria for inclusion in our study described in Section~\ref{subsec:requirements}. More details on the IFS data are provided in Section XX of the Supporting Information.} 
-with an effective resolution of 18~km \cite[version CY47R3, used from June~1 to June~27, 2023;][]{ECMWF81272} or 9~km \citep[version CY48R1, used from June~28 to August~31, 2023;][]{ECMWF81371}. The switch in IFS versions was dictated by ECMWF's schedule of updates \citep{ECMWFTimeline}.  The integrations are initialized twice daily at 00 and 12 UTC. In the vertical, the integrations have 91 (CY47R3) or 137 (CY48R1) levels, with the model top at 1 Pa.  The two-dimensional IFS fields we use in this study were interpolated to 0.25-degree resolution by ECMWF before downloading.  As ERA5 is based upon a recent but earlier cycle of the IFS system \citep[CY41R2;][]{Hersbach2020}, comparison of HENS against IFS quantifies the additional information content of the larger HENS ensemble size relative to that of IFS along with small systematic offsets between CY41R2 and CY47R3/CY48R1.
+To benchmark the information content of existing NWP ensembles, we use the 50-member ECMWF Integrated Forecast System \citep[IFS;][]{ECMWF}. IFS consists of medium-range 15-day integrations from day 0 to day 15, with an effective resolution of 18~km \cite[version CY47R3, used from June~1 to June~27, 2023;][]{ECMWF81272} or 9~km \citep[version CY48R1, used from June~28 to August~31, 2023;][]{ECMWF81371}. The switch in IFS versions was dictated by ECMWF's schedule of updates \citep{ECMWFTimeline}.  The integrations are initialized twice daily at 00 and 12 UTC. In the vertical, the integrations have 91 (CY47R3) or 137 (CY48R1) levels, with the model top at 1 Pa.  The two-dimensional IFS fields we use in this study were interpolated to 0.25-degree resolution by ECMWF before downloading.  As ERA5 is based upon a recent but earlier cycle of the IFS system \citep[CY41R2;][]{Hersbach2020}, comparison of HENS against IFS quantifies the additional information content of the larger HENS ensemble size relative to that of IFS along with small systematic offsets between CY41R2 and CY47R3/CY48R1.
 
 \section{Statistical methods} \label{appdx:statmethods}
 
@@ -383,7 +382,7 @@ Since the posterior distribution is not available in closed form, we resort to M
 % \end{figure}
 
 
-\color{red}
+% \color{red}
 \newpage
 
 \subsection{Testing GEV assumptions}
@@ -431,7 +430,7 @@ The fact that Greenland stands out so clearly with large anomalies relative to E
 \begin{figure}[!h]
     \centering
 \includegraphics[width = \textwidth]{Figure_HENS58GEV_calib.png}
-    \caption{Caption}
+    \caption{Calibration of HENS-58-GEV uncertainty intervals relative to HENS (panel a.) along with the width of the 95\% uncertainty interval for the 99.9th percentile estimate in HENS-58-GEV.}
     \label{fig:hens58calib}
 \end{figure}
 
